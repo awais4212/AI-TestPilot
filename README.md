@@ -1,36 +1,124 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# AI TestPilot
+
+AI-powered test case generation and failure analysis, built with Next.js and Google Gemini. Describe a feature or requirement, and TestPilot generates structured test cases for you. When a test fails, it helps you understand why.
+
+## Features
+
+- **AI test case generation**: turn a plain-English feature description into structured, ready-to-use test cases
+- **Failure analysis**: paste a failing test or error and get a likely root cause with suggested fixes
+- **Workspace**: a focused page for writing prompts and reviewing generated results
+- **Dashboard**: an overview of your generated test cases
+- **Input and output validation**: requests and AI responses are validated before they reach you, so malformed output is caught early
+
+## Tech Stack
+
+- [Next.js](https://nextjs.org/) (App Router) and React
+- Google Gemini API for generation and analysis
+- Next.js API routes (Node.js runtime)
+- Tailwind CSS (PostCSS)
+- ESLint
+
+## Project Structure
+
+```
+app/
+  api/
+    test-cases/        # POST: generate test cases from a prompt
+    analyze-failure/   # POST: analyze a failing test
+  dashboard/           # Dashboard page
+  workspace/           # Workspace page
+components/            # Reusable UI components
+lib/
+  gemini.js            # Gemini API client
+  prompts.js           # Prompt builders
+  validation.js        # Request and response validation
+public/                # Static assets
+```
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
+
+- Node.js 18 or later
+- A Google Gemini API key from [Google AI Studio](https://aistudio.google.com/)
+
+### Installation
+
+```bash
+git clone https://github.com/awais4212/AI-TestPilot.git
+cd AI-TestPilot
+npm install
+```
+
+### Environment Variables
+
+Create a `.env.local` file in the project root:
+
+```env
+GEMINI_API_KEY=your_api_key_here
+```
+
+Never commit this file. It is already listed in `.gitignore`.
+
+### Run the Development Server
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+## API Reference
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### `POST /api/test-cases`
 
-## Learn More
+Generates test cases from a feature description.
 
-To learn more about Next.js, take a look at the following resources:
+**Request**
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```json
+{
+  "description": "User login with email and password"
+}
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+**Response**
 
-## Deploy on Vercel
+```json
+{
+  "testCases": [
+    {
+      "title": "...",
+      "steps": ["..."],
+      "expectedResult": "..."
+    }
+  ]
+}
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Invalid input returns `400` with an `error` message.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### `POST /api/analyze-failure`
+
+Analyzes a failing test and suggests a cause and fix.
+
+## Scripts
+
+| Command         | Description                  |
+| --------------- | ---------------------------- |
+| `npm run dev`   | Start the development server |
+| `npm run build` | Create a production build    |
+| `npm run start` | Run the production build     |
+| `npm run lint`  | Run ESLint                   |
+
+## Deployment
+
+The easiest way to deploy is [Vercel](https://vercel.com/). Import the repo and add `GEMINI_API_KEY` under **Project Settings → Environment Variables**.
+
+## Contributing
+
+Contributions are welcome. Fork the repo, create a feature branch, and open a pull request.
+
+## Author
+
+**Syed Muhammad Awais Hashmi**: [@awais4212](https://github.com/awais4212)
